@@ -3,12 +3,20 @@
 """
 import sys
 from ortools.constraint_solver import pywrapcp
-import pika
+import pika,requests, json
 
 num_solutions=0
 
 # By default, solve the 8x8 problem.
 board_size = 8
+
+def write_queue(queue_name, msg, tache_id, soustache_id):
+    dataout = {}
+    dataout["tache_id"] = str(tache_id)
+    dataout["soustache_id"] = str(soustache_id)
+    dataout["result"] = str(msg)
+    requests.get("http://172.18.10.1:5000/write_queue/{}/{}/".format(queue_name, json.dumps(dataout)))
+
 
 def main(board_size):
   
@@ -38,8 +46,19 @@ def main(board_size):
 
 
 if __name__ == "__main__":
+
+  tache_id=0
+  soustache_id=0
+  
   if len(sys.argv) > 1:
     board_size = int(sys.argv[1])
-  main(board_size)
+    tache_id = int(sys.argv[2])
+    soustache_id = int(sys.argv[3])
+    
   print("Solutions found:", num_solutions)
+  print("tache ID:", tache_id)
+  print("Soustache ID:", soustache_id)
+
+  write_queue("dataout", num_solutions, tache_id, soustache_id)
+
  
