@@ -17,7 +17,7 @@ def write_queue(queue_name, msg, tache_id, soustache_id):
     requests.get("http://172.18.10.1:5000/write_queue/{}/{}/".format(queue_name, json.dumps(dataout)))
 
 
-def main(board_size):
+def main(tache_id, soustache_id,board_size):
   
   # Creates the solver.
   solver = pywrapcp.Solver("n-queens")
@@ -46,6 +46,11 @@ def main(board_size):
 
   print("Solutions found:", num_solutions)
 
+  write_queue("dataout", num_solutions, tache_id, soustache_id)
+  print()
+  print("dataout create in N_queue.py")
+
+
 
 if __name__ == "__main__":
 
@@ -56,11 +61,7 @@ if __name__ == "__main__":
     board_size = int(sys.argv[1])
     tache_id = int(sys.argv[2])
     soustache_id = int(sys.argv[3])
-    main(board_size)
+    main(tache_id, soustache_id,board_size)
    
   print("tache ID:", tache_id)
-  print("Soustache ID:", soustache_id)
-
-  write_queue("dataout", num_solutions, tache_id, soustache_id)
-
- 
+  print("Soustache ID:", soustache_id) 
