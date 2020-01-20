@@ -9,12 +9,10 @@ import pika,requests, json
 # By default, solve the 8x8 problem.
 board_size = 8
 
-def write_queue(queue_name, msg, tache_id, soustache_id):
-    dataout = {}
-    dataout["tache_id"] = str(tache_id)
-    dataout["soustache_id"] = str(soustache_id)
-    dataout["result"] = str(msg)
-    requests.get("http://172.18.10.1:5000/write_queue/{}/{}/".format(queue_name, json.dumps(dataout)))
+def write(msg,file):
+    param = {"data" : msg}
+    r = requests.post("http://192.168.56.101:5000/rabbit/"+file+"/", data=param)
+    print(r.text)
 
 
 def main(tache_id, soustache_id,board_size):
@@ -46,7 +44,14 @@ def main(tache_id, soustache_id,board_size):
 
   print("Solutions found:", num_solutions)
 
-  write_queue("dataout", num_solutions, tache_id, soustache_id)
+  dataout = {}
+  dataout["File_name"] = "Done"
+  dataout["tache_id"] = str(tache_id)
+  dataout["soustache_id"] = str(soustache_id)
+  dataout["result"] = str(num_solutions)
+
+  write(json.dumps(dataout),"Done")
+
   print()
   print("dataout create in N_queue.py")
 
