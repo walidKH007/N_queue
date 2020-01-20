@@ -5,7 +5,6 @@ import sys
 from ortools.constraint_solver import pywrapcp
 import pika,requests, json
 
-num_solutions=0
 
 # By default, solve the 8x8 problem.
 board_size = 8
@@ -20,7 +19,6 @@ def write_queue(queue_name, msg, tache_id, soustache_id):
 
 def main(board_size):
   
-  global num_solutions
   # Creates the solver.
   solver = pywrapcp.Solver("n-queens")
   # Creates the variables.
@@ -40,9 +38,13 @@ def main(board_size):
   db = solver.Phase(queens, solver.CHOOSE_FIRST_UNBOUND, solver.ASSIGN_MIN_VALUE)
   solver.NewSearch(db)
   
+  num_solutions = 0
+
   while solver.NextSolution():
     # Displays the solution just computed.
     num_solutions += 1
+
+  print("Solutions found:", num_solutions)
 
 
 if __name__ == "__main__":
@@ -54,11 +56,11 @@ if __name__ == "__main__":
     board_size = int(sys.argv[1])
     tache_id = int(sys.argv[2])
     soustache_id = int(sys.argv[3])
-    
-  print("Solutions found:", num_solutions)
+    main(board_size)
+   
   print("tache ID:", tache_id)
   print("Soustache ID:", soustache_id)
 
-  write_queue("dataout", num_solutions, tache_id, soustache_id)
+  #write_queue("dataout", num_solutions, tache_id, soustache_id)
 
  
