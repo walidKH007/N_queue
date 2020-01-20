@@ -12,7 +12,7 @@ board_size = 8
 def write(msg,file):
     param = {"data" : msg}
     r = requests.post("http://192.168.56.101:5000/rabbit/"+file, data=param)
-    print(r.text)
+    #print(r.text)
 
 
 def main(tache_id, soustache_id,board_size):
