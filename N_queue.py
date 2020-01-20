@@ -61,6 +61,6 @@ if __name__ == "__main__":
   print("tache ID:", tache_id)
   print("Soustache ID:", soustache_id)
 
-  #write_queue("dataout", num_solutions, tache_id, soustache_id)
+  write_queue("dataout", num_solutions, tache_id, soustache_id)
 
  
